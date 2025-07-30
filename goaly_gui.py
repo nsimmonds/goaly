@@ -4,6 +4,7 @@ import sqlite3
 import threading
 import time
 from datetime import datetime
+from emoji_config import *
 
 class GoalyGUI:
     def __init__(self, root):
@@ -47,7 +48,7 @@ class GoalyGUI:
         main_frame.rowconfigure(2, weight=1)
         
         # Title
-        title_label = ttk.Label(main_frame, text="🎯 Goaly Pomodoro Timer", 
+        title_label = ttk.Label(main_frame, text=f"{EMOJI_GOAL} Goaly Pomodoro Timer", 
                                font=('Arial', 16, 'bold'))
         title_label.grid(row=0, column=0, columnspan=3, pady=(0, 10))
         
@@ -138,7 +139,7 @@ class GoalyGUI:
         self.stop_button.config(state='disabled')
         self.timer_label.config(text="Timer stopped")
         self.progress_var.set(0)
-        self.log_message("⏹️ Timer stopped by user")
+        self.log_message(f"{EMOJI_STOP} Timer stopped by user")
     
     def timer_loop(self):
         while self.is_running:
@@ -148,16 +149,16 @@ class GoalyGUI:
             
             if task:
                 task_id, task_desc = task
-                self.log_message(f"🎯 Selected task: [{task_id}] {task_desc}")
+                self.log_message(f"{EMOJI_GOAL} Selected task: [{task_id}] {task_desc}")
             else:
-                self.log_message("🎯 No tasks available - time to add some!")
+                self.log_message(f"{EMOJI_GOAL} No tasks available - time to add some!")
             
             # Work session
             if not self.is_running:
                 break
                 
-            self.root.after(0, lambda: self.timer_label.config(text=f"⏰ Work Session ({self.work_minutes} minutes)"))
-            self.log_message(f"⏰ Starting work session ({self.work_minutes} minutes)")
+            self.root.after(0, lambda: self.timer_label.config(text=f"{EMOJI_TIMER} Work Session ({self.work_minutes} minutes)"))
+            self.log_message(f"{EMOJI_TIMER} Starting work session ({self.work_minutes} minutes)")
             
             for minute in range(self.work_minutes):
                 if not self.is_running:
@@ -167,9 +168,9 @@ class GoalyGUI:
                 self.root.after(0, self.progress_var.set, progress)
                 
                 if task:
-                    message = f"Work on: {task_desc} ({minute + 1}/{self.work_minutes})"
+                    message = f"Work on: {task_desc}. Minute: {minute + 1} out of {self.work_minutes}"
                 else:
-                    message = f"Work! ({minute + 1}/{self.work_minutes})"
+                    message = f"Work! Minute {minute + 1} out of {self.work_minutes})"
                 
                 self.log_message(message)
                 time.sleep(60)
@@ -177,11 +178,11 @@ class GoalyGUI:
             if not self.is_running:
                 break
                 
-            self.log_message("✅ Work session complete!")
+            self.log_message(f"{EMOJI_SUCCESS} Work session complete!")
             
             # Break session
-            self.root.after(0, lambda: self.timer_label.config(text=f"🎮 Break Session ({self.break_minutes} minutes)"))
-            self.log_message(f"🎮 Starting break session ({self.break_minutes} minutes)")
+            self.root.after(0, lambda: self.timer_label.config(text=f"{EMOJI_BREAK} Break Session ({self.break_minutes} minutes)"))
+            self.log_message(f"{EMOJI_BREAK} Starting break session ({self.break_minutes} minutes)")
             
             for minute in range(self.break_minutes):
                 if not self.is_running:
@@ -197,7 +198,7 @@ class GoalyGUI:
             if not self.is_running:
                 break
                 
-            self.log_message("🎉 Break complete! Ready for next round?")
+            self.log_message(f"{EMOJI_CELEBRATE} Break complete! Ready for next round?")
             self.root.after(0, self.progress_var.set, 0)
     
     def add_task_dialog(self):
@@ -221,7 +222,7 @@ class GoalyGUI:
                 c.execute('INSERT INTO tasks (description) VALUES (?)', (description,))
                 conn.commit()
                 conn.close()
-                self.log_message(f"✅ Task added: {description}")
+                self.log_message(f"{EMOJI_SUCCESS} Task added: {description}")
                 dialog.destroy()
         
         def cancel():
@@ -240,7 +241,7 @@ class GoalyGUI:
         # Create task management window
         task_window = tk.Toplevel(self.root)
         task_window.title("Task Manager")
-        task_window.geometry("500x400")
+        task_window.geometry("500x450")
         task_window.transient(self.root)
         task_window.grab_set()
         
@@ -249,7 +250,7 @@ class GoalyGUI:
         main_frame.pack(fill=tk.BOTH, expand=True)
         
         # Title
-        title_label = ttk.Label(main_frame, text="📝 Task Manager", font=('Arial', 14, 'bold'))
+        title_label = ttk.Label(main_frame, text=f"{EMOJI_TASKS} Task Manager", font=('Arial', 14, 'bold'))
         title_label.pack(pady=(0, 10))
         
         # Task list frame
@@ -321,7 +322,7 @@ class GoalyGUI:
             conn.commit()
             conn.close()
             
-            self.log_message(f"✅ Task {task_id} marked as completed")
+            self.log_message(f"{EMOJI_SUCCESS} Task {task_id} marked as completed")
             refresh_tasks()
         
         def delete_task():
@@ -345,7 +346,7 @@ class GoalyGUI:
             conn.commit()
             conn.close()
             
-            self.log_message(f"🗑️ Task {task_id} deleted")
+            self.log_message(f"{EMOJI_DELETE} Task {task_id} deleted")
             refresh_tasks()
         
         def add_new_task():
@@ -370,7 +371,7 @@ class GoalyGUI:
                     c.execute('INSERT INTO tasks (description) VALUES (?)', (description,))
                     conn.commit()
                     conn.close()
-                    self.log_message(f"✅ Task added: {description}")
+                    self.log_message(f"{EMOJI_SUCCESS} Task added: {description}")
                     add_dialog.destroy()
                     refresh_tasks()
             

@@ -1,5 +1,6 @@
 import sqlite3
 import time
+from emoji_config import *
 
 DB_NAME = 'tasks.db'
 WORK_SECONDS = 5  # Just 5 seconds for testing
@@ -21,12 +22,12 @@ def test_timer():
     task = get_random_task()
     if task:
         task_id, task_desc = task
-        print(f"🎯 Current task: [{task_id}] {task_desc}")
+        print(f"{EMOJI_GOAL} Current task: [{task_id}] {task_desc}")
     else:
-        print("🎯 No tasks available - time to add some!")
+        print(f"{EMOJI_GOAL} No tasks available - time to add some!")
     
     # Work session (shortened for testing)
-    print(f"\n⏰ Work session ({WORK_SECONDS} seconds)")
+    print(f"\n{EMOJI_TIMER} Work session ({WORK_SECONDS} seconds)")
     for second in range(WORK_SECONDS):
         if task:
             print(f"Work on: {task_desc} ({second + 1}/{WORK_SECONDS})")
@@ -34,15 +35,15 @@ def test_timer():
             print(f"Work! ({second + 1}/{WORK_SECONDS})")
         time.sleep(1)
     
-    print("\n✅ Work session complete!")
+    print(f"\n{EMOJI_SUCCESS} Work session complete!")
     
     # Break session (shortened for testing)
-    print(f"\n🎮 Break session ({BREAK_SECONDS} seconds)")
+    print(f"\n{EMOJI_BREAK} Break session ({BREAK_SECONDS} seconds)")
     for second in range(BREAK_SECONDS):
         print(f"Play! ({second + 1}/{BREAK_SECONDS})")
         time.sleep(1)
     
-    print("\n🎉 Break complete! Ready for next round?\n")
+    print(f"\n{EMOJI_CELEBRATE} Break complete! Ready for next round?\n")
 
 if __name__ == '__main__':
     test_timer() 
