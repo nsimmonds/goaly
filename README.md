@@ -1,0 +1,1 @@
+Goaly is an app that, at its most basic level, combines a pomodoro timer with a task list. It helps you not only focus your time, but it helps select a new task for each round so that you're not getting bored.
